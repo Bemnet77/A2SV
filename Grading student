@@ -1,0 +1,11 @@
+def gradingStudents(grades):
+    return list(map(conversion,grades))
+
+def conversion(number):
+    if number < 38:
+        return number
+    if number % 5 == 3:
+        return number +(5-3)
+    if number % 5 == 4 :
+        return number +(5-4)
+    return number 
