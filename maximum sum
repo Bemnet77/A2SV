@@ -1,0 +1,37 @@
+class Solution {
+public:
+    int maxSumTwoNoOverlap(const vector<int>& nums, int firstLen, int secondLen) {
+        const auto get_possibilities = [&nums](const int length){
+            std::vector<int> possibilities;
+            int window_sum{0};
+            for(int i = 0; i < length; ++i) {
+                window_sum += nums[i];
+            }
+            possibilities.push_back(window_sum);
+            for(int i = length; i < nums.size(); ++i) {
+                window_sum = window_sum - nums[i - length] + nums[i];
+                possibilities.push_back(window_sum);
+            }   
+            return possibilities;
+        };
+        
+        const auto first_possibilities = get_possibilities(firstLen);
+        const auto second_possibilities = get_possibilities(secondLen);
+        
+        const auto get_max_sum = [&nums](const std::vector<int>& first, const int firstLen, const std::vector<int>& second) {
+            int max_sum = std::numeric_limits<int>::min();
+            for(int i = 0; i < first.size(); ++i) {
+                for(int j = i + firstLen; j < second.size(); ++j) {
+                    int sum = first[i] + second[j];
+                    max_sum = std::max(max_sum, sum);
+                }
+            }
+            return max_sum;
+        };
+        
+        const auto left_first = get_max_sum(first_possibilities, firstLen, second_possibilities);
+        const auto left_second = get_max_sum(second_possibilities, secondLen, first_possibilities);
+        
+        return std::max(left_first, left_second); 
+	}
+};
